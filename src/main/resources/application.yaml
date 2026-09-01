@@ -1,3 +1,6 @@
 spring:
   application:
     name: brains
+  jpa:
+    hibernate:
+      ddl-auto: validate
