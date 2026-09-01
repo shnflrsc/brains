@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: brains
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  datasource:
+    hikari:
+      maximum-pool-size: 10
