@@ -240,3 +240,7 @@ The actuator exposes liveness/readiness probes (enabled via `management.endpoint
 ```bash
 curl http://localhost:8080/actuator/health
 ```
+
+## Disclaimer
+
+This project is a non-commercial, fan-made REST API and is not affiliated, endorsed, or associated with **PopCap Games** or **Electronic Arts Inc.** All Plants vs. Zombies game assets, character names, descriptions, and related intellectual property are the exclusive property of PopCap Games / Electronic Arts Inc. This project is for educational and demonstration purposes only and may be removed upon request from the rights holder.
