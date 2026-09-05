@@ -1,5 +1,5 @@
-- [ ] API Design
-- [ ] API implementation
+- [x] API Design
+- [x] API implementation
 - [ ] Complete seed data
 - [ ] Spring Boot on ECS Fargate
 - [ ] PostgreSQL on RDS
