@@ -35,14 +35,31 @@ function Write-Warn {
 
 # 1. Verify MiniStack is running
 Write-Step "Checking MiniStack connectivity at $Endpoint..."
-try {
-    $health = Invoke-RestMethod -Uri "$Endpoint/_ministack/health" -Method Get -TimeoutSec 3
-    if ($health.status -ne "ok") {
-        throw "MiniStack reported non-ok status: $($health.status)"
+function Test-MiniStackHealth {
+    param([string]$Url)
+    try {
+        $resp = Invoke-WebRequest -Uri $Url -Method Get -TimeoutSec 5
+        if ($resp.StatusCode -ne 200) {
+            throw "MiniStack returned HTTP $($resp.StatusCode)"
+        }
+        return $true
+    } catch {
+        Write-Warn "Health probe $Url failed: $($_.Exception.Message)"
+        return $false
     }
-    Write-Success "MiniStack is online and healthy."
-} catch {
-    Write-Error "Cannot connect to MiniStack at $Endpoint. Please run 'docker compose up -d' first."
+}
+
+$probeUrls = @("$Endpoint/_ministack/health", "$("$Endpoint" -replace 'localhost', '127.0.0.1')/_ministack/health") | Select-Object -Unique
+$connected = $false
+foreach ($probe in $probeUrls) {
+    if (Test-MiniStackHealth $probe) {
+        Write-Success "MiniStack is online and healthy ($probe)."
+        $connected = $true
+        break
+    }
+}
+if (-not $connected) {
+    Write-Error "Cannot connect to MiniStack. Please run 'docker compose up -d' first."
     exit 1
 }
 
@@ -87,7 +104,7 @@ if (-not $SkipBuild) {
 Write-Step "Registering ECS Task Definition from ecs-task-def.json..."
 $regOutput = aws --endpoint-url=$Endpoint ecs register-task-definition --cli-input-json file://ecs-task-def.json
 $revision = ($regOutput | ConvertFrom-Json).taskDefinition.revision
-Write-Success "Registered Task Definition: $TaskFamily:$revision"
+Write-Success "Registered Task Definition: ${TaskFamily}:${revision}"
 
 # 5. Ensure ECS Cluster exists
 Write-Step "Ensuring ECS cluster '$ClusterName' exists..."
