@@ -113,7 +113,7 @@ flowchart TB
 ### 1. Clone the repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/shnflrsc/brains.git
 cd brains
 ```
 
@@ -240,7 +240,3 @@ The actuator exposes liveness/readiness probes (enabled via `management.endpoint
 ```bash
 curl http://localhost:8080/actuator/health
 ```
-
-## Roadmap
-
-See [TODO.md] for the current roadmap, including completing seed data and deploying Spring Boot to ECS Fargate / PostgreSQL to RDS.
