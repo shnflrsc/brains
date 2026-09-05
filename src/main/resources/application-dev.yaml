@@ -1,9 +1,12 @@
 spring:
   application:
     name: brains
+  datasource:
+    url: jdbc:postgresql://localhost:5432/${POSTGRES_DB:brains}
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:postgres}
+    hikari:
+      maximum-pool-size: 10
   jpa:
     hibernate:
       ddl-auto: validate
-  datasource:
-    hikari:
-      maximum-pool-size: 10
